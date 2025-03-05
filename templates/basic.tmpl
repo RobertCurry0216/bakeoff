@@ -3,3 +3,56 @@
 		{{ .title }}
 	</h1>
 </html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ .title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .attribute {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .key {
+            font-weight: bold;
+        }
+        .value {
+            color: #0066cc;
+        }
+        .source {
+            font-style: italic;
+            color: #666;
+        }
+        .date {
+            font-size: 0.8em;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ .title }}</h1>
+    <p>Email: <strong>{{ .email }}</strong></p>
+    
+    <h2>User Attributes</h2>
+    {{ range .data }}
+    <div class="attribute">
+        <p class="key">{{ .Key }}</p>
+        {{ if .KeywordValue }}
+        <p>Value: <span class="value">{{ index .KeywordValue 0 }}</span></p>
+        {{ else if .FloatValue }}
+        <p>Value: <span class="value">{{ index .FloatValue 0 }}</span></p>
+        {{ end }}
+        <p class="source">Source: {{ index .SourcedFrom 0 }}</p>
+        <p class="date">Updated: {{ .UpdatedAt.Format "Jan 02, 2006 15:04:05" }}</p>
+    </div>
+    {{ end }}
+</body>
+</html>

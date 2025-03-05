@@ -26,7 +26,11 @@ func setupRouter() *gin.Engine {
 		case "application/json":
 			c.JSON(http.StatusOK, data)
 		default:
-			c.HTML(http.StatusOK, "basic.tmpl", gin.H{"title": "hi"})
+			c.HTML(http.StatusOK, "basic.tmpl", gin.H{
+				"title": "User Attributes",
+				"email": email,
+				"data":  data,
+			})
 		}
 	})
 
