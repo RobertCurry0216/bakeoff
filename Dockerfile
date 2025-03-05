@@ -1,8 +1,11 @@
 # Start from a Go base image matching your version
-FROM golang:1.23 as builder
+FROM golang:1.23 AS builder
 
 # Set working directory
 WORKDIR /app
+
+RUN apt-get update && apt-get install -y curl
+
 
 # Copy go.mod and go.sum files
 COPY go.mod go.sum ./
@@ -20,6 +23,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o bakeoff ./cmd/bakeoff
 FROM alpine:latest
 
 # Install ca-certificates for HTTPS requests
+ENV HUB_API_URL="http://app:3000"
 RUN apk --no-cache add ca-certificates
 
 WORKDIR /root/

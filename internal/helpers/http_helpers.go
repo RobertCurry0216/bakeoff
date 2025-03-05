@@ -5,7 +5,17 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 )
+
+func BaseUrl() string {
+	baseURL := os.Getenv("HUB_API_URL")
+	if baseURL == "" {
+		baseURL = "http://app:3000" // Default fallback
+	}
+
+	return baseURL
+}
 
 type UserAttributeRaw struct {
 	Category     string    `json:"category"`
@@ -28,7 +38,7 @@ func GetUserAttributesFromEmail(email string) []AttributeData {
 
 func FetchUserAttributes(email string) ([]UserAttributeRaw, error) {
 	// Construct the URL with the email parameter
-	url := fmt.Sprintf("http://hub.test:3000/api/headless/profile/attributes?email=%s", email)
+	url := fmt.Sprintf("%s/api/headless/profile/attributes?email=%s", BaseUrl(), email)
 
 	// Make the HTTP request
 	resp, err := http.Get(url)
@@ -59,7 +69,7 @@ func FetchUserAttributes(email string) ([]UserAttributeRaw, error) {
 
 func FetchAttributeMetadata(email string) (map[string]AttributeMetadataRaw, error) {
 	// Construct the URL with the email parameter
-	url := fmt.Sprintf("http://hub.test:3000/api/headless/profile/attribute_metadata?email=%s", email)
+	url := fmt.Sprintf("%s/api/headless/profile/attribute_metadata?email=%s", BaseUrl(), email)
 
 	// Make the HTTP request
 	resp, err := http.Get(url)
