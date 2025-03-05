@@ -6,30 +6,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ .title }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
         }
-        h1 {
-            color: #333;
+        .attributes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
         }
         .attribute {
-            border: 1px solid #ddd;
+            background: #e5e5e5;
             padding: 10px;
-            margin-bottom: 10px;
             border-radius: 5px;
         }
-        .key {
+        .name {
             font-weight: bold;
+            margin-bottom: 0.25rem;
         }
         .value {
             color: #0066cc;
         }
-        .source {
+        .comment {
             font-style: italic;
             color: #666;
+            margin-top: 0;
         }
         .date {
             font-size: 0.8em;
@@ -38,21 +40,17 @@
     </style>
 </head>
 <body>
-    <h1>{{ .title }}</h1>
+    <title>{{ .title }}</title>
+
     <p>Email: <strong>{{ .email }}</strong></p>
-    
-    <h2>User Attributes</h2>
-    {{ range .data }}
-    <div class="attribute">
-        <p class="key">{{ .Key }}</p>
-        {{ if .KeywordValue }}
-        <p>Value: <span class="value">{{ index .KeywordValue 0 }}</span></p>
-        {{ else if .FloatValue }}
-        <p>Value: <span class="value">{{ index .FloatValue 0 }}</span></p>
+    <div class="attributes">
+        {{ range .data }}
+        <div class="attribute">
+            <p class="name">{{ .Name }}</p>
+            <p class="comment">{{ .Comment }}</p>
+            <p>Value: <span class="value">{{ .Value }}</span></p>
+        </div>
         {{ end }}
-        <p class="source">Source: {{ index .SourcedFrom 0 }}</p>
-        <p class="date">Updated: {{ .UpdatedAt.Format "Jan 02, 2006 15:04:05" }}</p>
     </div>
-    {{ end }}
 </body>
 </html>
