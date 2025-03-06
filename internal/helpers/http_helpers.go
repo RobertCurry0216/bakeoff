@@ -30,10 +30,14 @@ type AttributeMetadataRaw struct {
 	Comment string `json:"comment"`
 }
 
-func GetUserAttributesFromEmail(email string) []AttributeData {
-	data, _ := FetchUserAttributes(email)
-	metadata, _ := FetchAttributeMetadata(email)
-	return MakeAttributes(data, metadata)
+func GetUserAttributesFromEmail(email string) ([]AttributeData, error) {
+	data, dataErr := FetchUserAttributes(email)
+	metadata, metaErr := FetchAttributeMetadata(email)
+	var err error
+	if dataErr != nil || metaErr != nil {
+		err = fmt.Errorf("meta: %s, data: %s", metaErr.Error(), dataErr.Error())
+	}
+	return MakeAttributes(data, metadata), err
 }
 
 func FetchUserAttributes(email string) ([]UserAttributeRaw, error) {

@@ -15,17 +15,24 @@ func setupRouter() *gin.Engine {
 
 	r.GET("/user/:email", func(c *gin.Context) {
 		email := c.Params.ByName("email")
-		attributes := helpers.GetUserAttributesFromEmail(email)
+		attributes, err := helpers.GetUserAttributesFromEmail(email)
 
-		switch c.ContentType() {
-		case "application/json":
-			c.JSON(http.StatusOK, attributes)
-		default:
-			c.HTML(http.StatusOK, "basic.tmpl", gin.H{
-				"title": "User",
-				"email": email,
-				"data":  attributes,
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"baseURL": helpers.BaseUrl(),
+				"err":     err.Error(),
 			})
+		} else {
+			switch c.ContentType() {
+			case "application/json":
+				c.JSON(http.StatusOK, attributes)
+			default:
+				c.HTML(http.StatusOK, "basic.tmpl", gin.H{
+					"title": "User",
+					"email": email,
+					"data":  attributes,
+				})
+			}
 		}
 	})
 
